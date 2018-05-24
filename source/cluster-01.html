@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cluster-01</title>
+    <style>
+        .node {
+            fill: steelblue;
+            stroke: none;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<svg width="500" height="500">
+    <g transform="translate(5, 5)">
+        <g class="links"></g>
+        <g class="nodes"></g>
+    </g>
+</svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+  const data = {
+    'name': 'A1',
+    'children': [
+      {
+        'name': 'B1',
+        'children': [
+          {'name': 'C1', 'value': 100},
+          {'name': 'C2', 'value': 300},
+          {'name': 'C3', 'value': 200}
+        ]
+      },
+      {
+        'name': 'B2',
+        'value': 200
+      }
+    ]
+  }
+
+  const clusterLayout = d3.cluster()
+    .size([400, 200])
+
+  const root = d3.hierarchy(data)
+
+  clusterLayout(root)
+
+  // Nodes
+  d3.select('svg g.nodes')
+    .selectAll('circle.node')
+    .data(root.descendants())
+    .enter()
+    .append('circle')
+    .attr('class', 'node')
+    .attr('cx', d => d.x)
+    .attr('cy', d => d.y)
+    .attr('r', 4)
+
+  // Links
+  d3.select('svg g.links')
+    .selectAll('line.link')
+    .data(root.links())
+    .enter()
+    .append('line')
+    .attr('class', 'link')
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y)
+</script>
+</body>
+</html>
