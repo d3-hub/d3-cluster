@@ -45,17 +45,25 @@
     ]
   }
 
+  // .size 设置布局大小
   const clusterLayout = d3.cluster()
     .size([400, 200])
 
+  // 根据数据构建节点, 包括根节点的位置，深度，子节点的信息
   const root = d3.hierarchy(data)
 
+  console.log('----root', root)
+
+  // 将给定的层次数据排列到簇中, 这里不懂
   clusterLayout(root)
+
+  console.log('-----root.descendants', root.descendants())
+  console.log('-----root.links', root.links())
 
   // Nodes
   d3.select('svg g.nodes')
     .selectAll('circle.node')
-    .data(root.descendants())
+    .data(root.descendants())  //生成后代数据(即获取到节点的位置信息)
     .enter()
     .append('circle')
     .attr('class', 'node')
@@ -66,7 +74,7 @@
   // Links
   d3.select('svg g.links')
     .selectAll('line.link')
-    .data(root.links())
+    .data(root.links())  // 生活连线信息(即获取每条连线的两个端点的信息)
     .enter()
     .append('line')
     .attr('class', 'link')
